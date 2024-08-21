@@ -1,16 +1,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "register.h"
+
 #include "binary.h"
 #include "instructions.h"
+#include "memory.h"
+#include "register.h"
 
 #define LINE_MAX_CHARS 34
- 
 
 void processFile(char *filename) {
     Register registers[32];
+    int memory[MEMORY_SIZE];
     initializeRegisters(registers);
+    initializeMemory(memory);
 
     FILE *file = fopen(filename, "r");
     if (file == NULL) {
@@ -20,11 +23,11 @@ void processFile(char *filename) {
 
     char line[LINE_MAX_CHARS];
     while (fgets(line, sizeof(line), file)) {
-        line[strcspn(line, "\n")] = '\0'; 
+        line[strcspn(line, "\n")] = '\0';
 
         if (verifyIfAllValuesAreBinary(line)) {
             printf("Line: %s\n", line);
-            processInstructionAndVerifyType(line, registers);
+            processInstructionAndVerifyType(line, registers, memory);
             printf("\n");
         } else {
             printf("Invalid binary line: %s\n", line);

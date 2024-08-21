@@ -1,7 +1,8 @@
+#include "binary.h"
+
+#include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
-#include <stdbool.h>
-#include "binary.h"
 
 int verifyIfAllValuesAreBinary(char *lineValues) {
     for (int i = 0; lineValues[i] != '\0'; i++) {

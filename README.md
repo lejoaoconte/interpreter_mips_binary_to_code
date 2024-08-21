@@ -1,7 +1,6 @@
 ## run
 
-gcc -Wall -Wextra -std=c11 -I./src main.c src/binary.c src/instructions.c -o main
-
+gcc -Wall -Wextra -std=c11 -I./src main.c src/binary.c src/instructions.c src/register.c src/memory.c -o main
 
 
 00000001010010110100100000100010
