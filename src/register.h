@@ -1,6 +1,8 @@
 #ifndef REGISTER_H
 #define REGISTER_H
 
+#define REGISTER_COUNT 32
+
 typedef struct {
     char name[6];
     int value;
@@ -13,4 +15,4 @@ void calculateValueOnRegister(Register *registers,
                               char *secondValue, char *operation);
 void initializeRegisters(Register *registers);
 
-#endif 
+#endif

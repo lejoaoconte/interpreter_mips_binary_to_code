@@ -14,80 +14,85 @@ void initializeMemory(int *memory) {
 }
 
 void verifyControlSignalsInProcessor(char *lineValues) {
-    ControlSignals controlSignals[8];
+    ControlSignals controlSignals[CONTROL_SIGNAL_COUNT];
     initializeControlSignals(controlSignals);
-    char firstSixBits[7];
-    getIntervalChars(lineValues, firstSixBits, 0, 6);
-    printf("firstSixBits: %s\n", firstSixBits);
+    char opcode[7];
+    getIntervalChars(lineValues, opcode, 0, 6);
+    opcode[6] = '\0';
 
-    if (strcmp(firstSixBits, "000000") == 0 ||
-        strcmp(firstSixBits, "001000") == 0) {
-        controlSignals[0].value = "1";
-        controlSignals[1].value = "0";
-        controlSignals[2].value = "0";
-        controlSignals[3].value = "0";
-        controlSignals[4].value = "10";
-        controlSignals[5].value = "0";
-        controlSignals[6].value = "0";
-        controlSignals[7].value = "1";
+    if (strcmp(opcode, "000000") == 0 || strcmp(opcode, "001000") == 0) {
+        setRTypeControlSignals(controlSignals);
+    } else if (strcmp(opcode, "100011") == 0) {
+        setLWTypeControlSignals(controlSignals);
+    } else if (strcmp(opcode, "101011") == 0) {
+        setSWTypeControlSignals(controlSignals);
+    } else if (strcmp(opcode, "000100") == 0) {
+        setBEQTypeControlSignals(controlSignals);
     } else {
-        if (strcmp(firstSixBits, "100011") == 0) {
-            controlSignals[0].value = "0";
-            controlSignals[1].value = "0";
-            controlSignals[2].value = "1";
-            controlSignals[3].value = "1";
-            controlSignals[4].value = "00";
-            controlSignals[5].value = "0";
-            controlSignals[6].value = "1";
-            controlSignals[7].value = "1";
-        } else if (strcmp(firstSixBits, "101011") == 0) {
-            controlSignals[0].value = "x";
-            controlSignals[1].value = "0";
-            controlSignals[2].value = "0";
-            controlSignals[3].value = "x";
-            controlSignals[4].value = "00";
-            controlSignals[5].value = "1";
-            controlSignals[6].value = "1";
-            controlSignals[7].value = "0";
-        } else if (strcmp(firstSixBits, "000100") == 0) {
-            controlSignals[0].value = "x";
-            controlSignals[1].value = "1";
-            controlSignals[2].value = "0";
-            controlSignals[3].value = "x";
-            controlSignals[4].value = "01";
-            controlSignals[5].value = "0";
-            controlSignals[6].value = "0";
-            controlSignals[7].value = "0";
-        } else {
-            printf("I-type instruction not found\n");
-        }
+        printf("Opcode Instructions Not Found\n");
     }
 
-    for (int i = 0; i < 7; i++) {
+    printControlSignals(controlSignals);
+}
+
+void printControlSignals(ControlSignals *controlSignals) {
+    for (int i = 0; i < CONTROL_SIGNAL_COUNT; i++) {
         printf("%s: %s", controlSignals[i].name, controlSignals[i].value);
-        if (i < 6) {
+        if (i < CONTROL_SIGNAL_COUNT - 1) {
             printf(", ");
         }
     }
-
     printf("\n");
 }
 
+void setRTypeControlSignals(ControlSignals *controlSignals) {
+    controlSignals[REG_DST].value = "1";
+    controlSignals[REG_WRITE].value = "1";
+    controlSignals[ALU_OP].value = "10";
+}
+
+void setLWTypeControlSignals(ControlSignals *controlSignals) {
+    controlSignals[ALU_SRC].value = "1";
+    controlSignals[MEM_TO_REG].value = "1";
+    controlSignals[REG_WRITE].value = "1";
+    controlSignals[MEM_READ].value = "1";
+}
+
+void setSWTypeControlSignals(ControlSignals *controlSignals) {
+    controlSignals[ALU_SRC].value = "1";
+    controlSignals[MEM_WRITE].value = "1";
+}
+
+void setBEQTypeControlSignals(ControlSignals *controlSignals) {
+    controlSignals[BRANCH].value = "1";
+    controlSignals[ALU_OP].value = "01";
+}
+
 void initializeControlSignals(ControlSignals *controlSignals) {
-    controlSignals[0].name = "RegDst";
-    controlSignals[0].value = "0";
-    controlSignals[1].name = "Branch";
-    controlSignals[1].value = "0";
-    controlSignals[2].name = "MemRead";
-    controlSignals[2].value = "0";
-    controlSignals[3].name = "MemtoReg";
-    controlSignals[3].value = "0";
-    controlSignals[4].name = "ALUOp";
-    controlSignals[4].value = "00";
-    controlSignals[5].name = "MemWrite";
-    controlSignals[5].value = "0";
-    controlSignals[6].name = "ALUSrc";
-    controlSignals[6].value = "0";
-    controlSignals[7].name = "RegWrite";
-    controlSignals[7].value = "0";
+    controlSignals[REG_DST].name = "RegDst";
+    controlSignals[BRANCH].name = "Branch";
+    controlSignals[MEM_READ].name = "MemRead";
+    controlSignals[MEM_TO_REG].name = "MemtoReg";
+    controlSignals[ALU_OP].name = "ALUOp";
+    controlSignals[MEM_WRITE].name = "MemWrite";
+    controlSignals[ALU_SRC].name = "ALUSrc";
+    controlSignals[REG_WRITE].name = "RegWrite";
+
+    for (int i = 0; i < CONTROL_SIGNAL_COUNT; i++) {
+        controlSignals[i].value = "0";
+    }
+}
+
+void verifyBeqPCValue(Register *registers, char *rs, char *rt,
+                      char *immediate) {
+    int indexRs = getRegisterIndex(registers, rs);
+    int indexRt = getRegisterIndex(registers, rt);
+    int decimalImmediate = convertBinaryToDecimal(immediate);
+    int offset = decimalImmediate << 2;
+
+    if (registers[indexRs].value == registers[indexRt].value) {
+        printf("PC = PC + 4 + %d\n", offset);
+    } else {
+        printf("PC = PC + 4\n");
+    }
 }

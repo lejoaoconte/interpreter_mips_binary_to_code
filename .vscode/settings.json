@@ -6,6 +6,7 @@
     "string.h": "c",
     "instructions.h": "c",
     "register.h": "c",
-    "memory.h": "c"
+    "memory.h": "c",
+    "typeinfo": "c"
   }
 }

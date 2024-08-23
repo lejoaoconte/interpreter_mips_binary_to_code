@@ -1,9 +1,10 @@
 
+#include "register.h"
+
 #include <stdio.h>
 #include <string.h>
 
 #include "binary.h"
-#include "register.h"
 
 static char *registerNames[] = {
     "$zero", "$at", "$v0", "$v1", "$a0", "$a1", "$a2", "$a3",
@@ -22,7 +23,7 @@ void getRegisterInstruction(char *lineValues, char *result) {
 }
 
 int getRegisterIndex(Register *registers, char *registerName) {
-    for (int i = 0; i < 32; i++) {
+    for (int i = 0; i < REGISTER_COUNT; i++) {
         if (strcmp(registers[i].name, registerName) == 0) {
             return i;
         }
@@ -52,7 +53,7 @@ void calculateValueOnRegister(Register *registers,
 }
 
 void initializeRegisters(Register *registers) {
-    for (int i = 0; i < 32; i++) {
+    for (int i = 0; i < REGISTER_COUNT; i++) {
         strcpy(registers[i].name, registerNames[i]);
         registers[i].value = 0;
     }
