@@ -7,8 +7,10 @@
 #include "memory.h"
 #include "register.h"
 
+// Tamanho máximo de caracteres de uma linha
 #define LINE_MAX_CHARS 34
 
+// Processa o arquivo de instruções
 void processFile(char *filename) {
     Register registers[32];
     int memory[MEMORY_SIZE];
@@ -38,6 +40,7 @@ void processFile(char *filename) {
 }
 
 int main(int argc, char *argv[]) {
+    // Verifica se o arquivo de instruções foi passado como argumento
     if (argc != 2) {
         fprintf(stderr, "Usage: %s <instruction_file>.txt\n", argv[0]);
         return EXIT_FAILURE;

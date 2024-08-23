@@ -3,9 +3,12 @@
 
 #include "register.h"
 
+// Tamanho da memória
 #define MEMORY_SIZE 1024
+// Quantidade de sinais de controle
 #define CONTROL_SIGNAL_COUNT 8
 
+// Sinais de controle
 typedef enum {
     REG_DST,
     BRANCH,
@@ -17,6 +20,7 @@ typedef enum {
     REG_WRITE
 } ControlSignalType;
 
+// Estrutura de sinais de controle
 typedef struct {
     char *name;
     char *value;

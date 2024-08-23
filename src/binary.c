@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 
+// Verifica se todos os valores da linha são binários
 int verifyIfAllValuesAreBinary(char *lineValues) {
     for (int i = 0; lineValues[i] != '\0'; i++) {
         if (lineValues[i] != '0' && lineValues[i] != '1') {
@@ -14,6 +15,7 @@ int verifyIfAllValuesAreBinary(char *lineValues) {
     return true;
 }
 
+// Pega os últimos n caracteres de uma string
 void getLastNChars(char *str, char *result, int n) {
     int length = strlen(str);
     char *startPos = length >= n ? str + (length - n) : str;
@@ -21,6 +23,7 @@ void getLastNChars(char *str, char *result, int n) {
     result[n] = '\0';
 }
 
+// Pega os caracteres de um intervalo de uma string
 void getIntervalChars(char *str, char *result, int start, int end) {
     int length = strlen(str);
     if (start >= length) {
@@ -33,6 +36,7 @@ void getIntervalChars(char *str, char *result, int start, int end) {
     result[copyLength] = '\0';
 }
 
+// Converte um número binário para decimal
 int convertBinaryToDecimal(char *binary) {
     int decimal = 0;
     for (int i = 0; binary[i] != '\0'; i++) {

@@ -6,6 +6,7 @@
 
 #include "binary.h"
 
+// Processa a instrução e verifica o tipo e chama a função correspondente
 void processInstructionAndVerifyType(char *lineValues, Register *registers,
                                      int *memory) {
     char firstSixBits[7];
@@ -21,6 +22,7 @@ void processInstructionAndVerifyType(char *lineValues, Register *registers,
     }
 }
 
+// Extrai os componentes de uma instrução R
 void extractRTypeComponents(char *lineValues, char *rs, char *rt, char *rd) {
     getIntervalChars(lineValues, rs, 6, 11);
     getIntervalChars(lineValues, rt, 11, 16);
@@ -30,6 +32,7 @@ void extractRTypeComponents(char *lineValues, char *rs, char *rt, char *rd) {
     getRegisterInstruction(rd, rd);
 }
 
+// Processa uma instrução R
 void processRTypeInstruction(char *lineValues, Register *registers) {
     char lastSixBits[7];
     getLastNChars(lineValues, lastSixBits, 6);
@@ -46,6 +49,7 @@ void processRTypeInstruction(char *lineValues, Register *registers) {
     }
 }
 
+// Extrai os componentes de uma instrução I
 void extractITypeComponents(char *lineValues, char *rs, char *rt,
                             char *immediate) {
     getIntervalChars(lineValues, rs, 6, 11);
@@ -55,6 +59,7 @@ void extractITypeComponents(char *lineValues, char *rs, char *rt,
     getRegisterInstruction(rt, rt);
 }
 
+// Processa uma instrução I
 void processITypeInstruction(char *lineValues, Register *registers,
                              int *memory) {
     char firstSixBits[7];
@@ -79,6 +84,7 @@ void processITypeInstruction(char *lineValues, Register *registers,
     }
 }
 
+// Calcula o valor da instrução add e add com $zero e atualiza o registrador
 void handleAddInstruction(char *lineValues, Register *registers) {
     char rs[6], rt[6], rd[6];
     extractRTypeComponents(lineValues, rs, rt, rd);
@@ -102,6 +108,7 @@ void handleAddInstruction(char *lineValues, Register *registers) {
     }
 }
 
+// Calcula o valor da instrução sub e atualiza o registrador
 void handleSubInstruction(char *lineValues, Register *registers) {
     char rs[6], rt[6], rd[6];
     extractRTypeComponents(lineValues, rs, rt, rd);
@@ -113,6 +120,7 @@ void handleSubInstruction(char *lineValues, Register *registers) {
     verifyControlSignalsInProcessor(lineValues);
 }
 
+// Calcula o valor da instrução addi e atualiza o registrador
 void handleAddiInstruction(char *lineValues, Register *registers) {
     char rs[6], rt[6], immediate[17];
     extractITypeComponents(lineValues, rs, rt, immediate);
@@ -125,6 +133,7 @@ void handleAddiInstruction(char *lineValues, Register *registers) {
     verifyControlSignalsInProcessor(lineValues);
 }
 
+// Calcula o valor da instrução beq e atualiza o PC
 void handleBeqInstruction(char *lineValues, Register *registers) {
     char rs[6], rt[6], immediate[17];
     extractITypeComponents(lineValues, rs, rt, immediate);
@@ -134,6 +143,7 @@ void handleBeqInstruction(char *lineValues, Register *registers) {
     verifyControlSignalsInProcessor(lineValues);
 }
 
+// Calcula o valor da instrução lw e atualiza o registrador
 void handleLWInstruction(char *lineValues, Register *registers, int *memory) {
     char rs[6], rt[6], immediate[17];
     extractITypeComponents(lineValues, rs, rt, immediate);
@@ -151,6 +161,7 @@ void handleLWInstruction(char *lineValues, Register *registers, int *memory) {
     verifyControlSignalsInProcessor(lineValues);
 }
 
+// Calcula o valor da instrução sw e atualiza a memória
 void handleSWInstruction(char *lineValues, Register *registers, int *memory) {
     char rs[6], rt[6], immediate[17];
     extractITypeComponents(lineValues, rs, rt, immediate);

@@ -3,6 +3,7 @@
 
 #define REGISTER_COUNT 32
 
+// Estrutura de registrador
 typedef struct {
     char name[6];
     int value;

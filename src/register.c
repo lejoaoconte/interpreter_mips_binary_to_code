@@ -6,12 +6,14 @@
 
 #include "binary.h"
 
+// Vetor com os nomes dos registradores
 static char *registerNames[] = {
     "$zero", "$at", "$v0", "$v1", "$a0", "$a1", "$a2", "$a3",
     "$t0",   "$t1", "$t2", "$t3", "$t4", "$t5", "$t6", "$t7",
     "$s0",   "$s1", "$s2", "$s3", "$s4", "$s5", "$s6", "$s7",
     "$t8",   "$t9", "$k0", "$k1", "$gp", "$sp", "$fp", "$ra"};
 
+// Obtém o nome do registrador
 void getRegisterInstruction(char *lineValues, char *result) {
     int decimal = convertBinaryToDecimal(lineValues);
 
@@ -22,6 +24,7 @@ void getRegisterInstruction(char *lineValues, char *result) {
     }
 }
 
+// Obtém o índice do registrador
 int getRegisterIndex(Register *registers, char *registerName) {
     for (int i = 0; i < REGISTER_COUNT; i++) {
         if (strcmp(registers[i].name, registerName) == 0) {
@@ -31,6 +34,7 @@ int getRegisterIndex(Register *registers, char *registerName) {
     return -1;
 }
 
+// Calcula o valor do registrador, para add, sub e addi e atualiza o registrador
 void calculateValueOnRegister(Register *registers,
                               char *registerToRegistreValue, char *firstValue,
                               char *secondValue, char *operation) {
@@ -52,6 +56,7 @@ void calculateValueOnRegister(Register *registers,
     }
 }
 
+// Inicializa os registradores
 void initializeRegisters(Register *registers) {
     for (int i = 0; i < REGISTER_COUNT; i++) {
         strcpy(registers[i].name, registerNames[i]);
